@@ -38,16 +38,33 @@ class _FullScreenPlayerState extends State<FullScreenPlayer> {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
-          return AspectRatio(
-              aspectRatio: controller.value.aspectRatio,
-              child: Stack(children: [
-                VideoPlayer(controller),
-                Positioned(
-                  bottom: 40,
-                  left: 50,
-                  child: _VideoCaption(caption: widget.caption),
-                )
-              ]));
+          return GestureDetector(
+            onTap: () {
+              if (controller.value.isPlaying) {
+                controller.pause();
+              } else {
+                controller.play();
+              }
+            },
+            child: AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: Stack(children: [
+                  VideoPlayer(controller),
+                  Positioned(
+                    bottom: 40,
+                    left: 50,
+                    child: _VideoCaption(caption: widget.caption),
+                  ),
+                  if (controller.value.isPlaying == false)
+                    const Center(
+                      child: Icon(
+                        Icons.play_circle_outline,
+                        color: Colors.white,
+                        size: 60,
+                      ),
+                    )
+                ])),
+          );
         });
   }
 }
